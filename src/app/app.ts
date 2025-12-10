@@ -1,12 +1,18 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { IconsModule,} from '@amithvns/ng-heroicons';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    IconsModule,
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css'],
 })
-export class App {
-  protected readonly title = signal('buch-frontend');
+export class AppComponent {
+  title = 'buch-frontend';
 }
+
