@@ -1,0 +1,131 @@
+/* Layout */
+
+.login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background-color: rgba(43, 31, 19, 0.25);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+ .login::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/BookShelf_Backround.jpg') center/cover no-repeat;
+  filter: blur(3px);
+  z-index: -1;
+}
+
+.login__card {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  border: 3px solid #2b1f13;
+  background: #4B3621;
+  box-shadow: 0 0 20px rgb(137, 105, 62, 0.4);
+}
+
+/* Header */
+
+.login__icon-img {
+  width: 48px;
+  height: 48px;
+  margin: 10px auto 0 auto;
+  border: 3px solid #2b1f13;
+  border-radius: 50%;
+}
+
+.login__header {
+  text-align: center;
+}
+
+.login__title {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: -5px 0;
+}
+
+.login__subtitle {
+  margin-top: -5px;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* Content */
+
+.login__content {
+  padding: 5px 20px 5px;
+}
+
+.login__form {
+  display: grid;
+  gap: 2px;
+}
+
+.login__alert {
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid rgb(75, 15, 15);
+  background: rgba(75, 15, 15, 0.75);
+}
+
+.login__alert-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+}
+
+.login__label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.login__input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: #2b1f13;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.login__input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* Login-Button */
+
+.login__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  height: 40px;
+  min-width: 100px;
+  width: auto;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 24px;
+  background: #2b1f13;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+}
+
+.login__button:hover {
+  background: rgba(43, 31, 19, 0.75);
+  cursor: pointer;
+}
+/* =========================
+   7) Responsive
+   ========================= */
+@media (max-width: 360px) {
+  .login__card {
+    border-radius: 10px;
+  }
+  .login__content {
+    padding: 4px 4px 6px;
+  }
+}
