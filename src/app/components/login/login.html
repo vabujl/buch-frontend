@@ -1,0 +1,56 @@
+<div class="login">
+  <div class="login__card">
+    <!-- B-Icon -->
+    <div class="login__icon">
+      <img src="/book_icon.jpg" alt="Buch Icon" class="login__icon-img">
+    </div>
+
+    <!-- Header -->
+    <header class="login__header">
+      <h1 class="login__title">Bücherliste</h1>
+      <p class="login__subtitle">Melden Sie sich an, um fortzufahren</p>
+    </header>
+
+    <!-- Content -->
+    <section class="login__content">
+      <form (submit)="handleSubmit($event)" class="login__form" novalidate>
+        <!-- Username -->
+        <div class="login__field">
+          <label for="username" class="login__label">Benutzername</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="username"
+            class="login__input"
+            autocomplete="username"
+            required
+          />
+        </div>
+
+        <!-- password -->
+        <div class="login__field">
+          <label for="password" class="login__label">Passwort</label>
+          <input
+            id="password"
+            name="password"
+            standalone=true
+            type="password"
+            placeholder="••••••••"
+            class="login__input"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <!-- Error Code -->
+        <div *ngIf="error" class="login__alert" role="alert">
+          <p class="login__alert-text">{{ error }}</p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="login__button">Login</button>
+      </form>
+    </section>
+  </div>
+</div>
