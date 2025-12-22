@@ -35,7 +35,7 @@ export class Login {
       (username === 'user' && password === 'p');
 
     if (valid) {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/search']);
     } else {
       this.error = 'Anmeldung fehlgeschlagen';
     }

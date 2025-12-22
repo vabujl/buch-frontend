@@ -5,6 +5,5 @@ import { Login } from './components/login/login'
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'search', component: Search },
-  { path: '', redirectTo: 'search', pathMatch: 'full',},
+  { path: '', redirectTo: 'login', pathMatch: 'full',},
 ];
-
