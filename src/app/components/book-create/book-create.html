@@ -1,35 +1,83 @@
-<div class="flex justify-center mt-10">
-  <div class="card bg-base-100 w-96 shadow-xl border border-base-200">
-    <div class="card-body">
-      <h2 class="card-title text-2xl mb-4">Neues Buch anlegen</h2>
+<div class="space-y-6">
+  <div class="alert alert-info">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <span class="font-semibold">Neues Buch anlegen</span>
+  </div>
 
-      <form>
+  <div class="card bg-base-100 w-full max-w-2xl mx-auto shadow-xl border border-base-200">
+    <div class="card-body">
+      <h2 class="card-title text-2xl mb-4">Buchdetails eingeben</h2>
+
+      <form class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+        <div class="fieldset md:col-span-2">
+          <label class="fieldset-label">Titel</label>
+          <input type="text" placeholder="z.B. Die Abenteuer des Tom Sawyer" class="input input-bordered w-full" />
+        </div>
+
+        <div class="fieldset md:col-span-2">
+          <label class="fieldset-label">Untertitel</label>
+          <input type="text" placeholder="z.B. Roman" class="input input-bordered w-full" />
+        </div>
 
         <div class="fieldset">
-          <label class="fieldset-label">Buchtitel</label>
-          <input type="text" placeholder="z.B. Harry Potter" class="input input-bordered w-full" />
-        </div>
-
-        <div class="fieldset mt-4">
           <label class="fieldset-label">Autor</label>
-          <input type="text" placeholder="z.B. J.K. Rowling" class="input input-bordered w-full" />
+          <input type="text" placeholder="z.B. Mark Twain" class="input input-bordered w-full" />
         </div>
 
-        <div class="fieldset mt-4">
+        <div class="fieldset">
           <label class="fieldset-label">ISBN</label>
           <input type="text" placeholder="978-3-..." class="input input-bordered w-full" />
         </div>
 
-        <div class="fieldset mt-4">
+        <div class="fieldset">
           <label class="fieldset-label">Preis (€)</label>
-          <input type="number" placeholder="0.00" class="input input-bordered w-full" />
+          <input type="number" placeholder="0.00" class="input input-bordered w-full" min="0" />
         </div>
 
-        <div class="card-actions justify-end mt-6">
+        <div class="fieldset">
+          <label class="fieldset-label">Rabatt (%)</label>
+          <input type="number" placeholder="0.00" class="input input-bordered w-full" min="0" max="1" />
+        </div>
+
+        <div class="fieldset">
+          <label class="fieldset-label">Art</label>
+          <select class="select select-bordered w-full">
+            <option selected>DRUCK</option>
+            <option>KINDLE</option>
+          </select>
+        </div>
+
+        <div class="fieldset">
+          <label class="fieldset-label">Rating (0-5)</label>
+          <input type="number" placeholder="3" class="input input-bordered w-full" min="0" max="5" />
+        </div>
+
+        <div class="fieldset md:col-span-2">
+          <label class="fieldset-label">Homepage</label>
+          <input type="url" placeholder="https://beispiel.de" class="input input-bordered w-full" />
+        </div>
+
+        <div class="fieldset md:col-span-2">
+          <label class="fieldset-label">Schlagwörter (kommagetrennt)</label>
+          <input type="text" placeholder="z.B. Klassiker, Abenteuer" class="input input-bordered w-full" />
+        </div>
+
+        <div class="fieldset">
+          <label class="fieldset-label">Erscheinungsdatum</label>
+          <input type="date" class="input input-bordered w-full" />
+        </div>
+
+        <div class="fieldset flex items-center pt-6">
+          <label class="label cursor-pointer gap-2">
+            <input type="checkbox" class="checkbox" checked />
+            <span class="label-text">Sofort lieferbar</span>
+          </label>
+        </div>
+
+        <div class="card-actions justify-end mt-4 md:col-span-2">
           <button class="btn btn-ghost">Abbrechen</button>
           <button class="btn btn-primary">Speichern</button>
         </div>
-
       </form>
     </div>
   </div>

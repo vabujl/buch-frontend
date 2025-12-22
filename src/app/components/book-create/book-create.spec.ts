@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Create } from './book-create.component';
+import { Create } from './book-create';
 
 describe('CreateComponent', () => {
   let component: Create;
