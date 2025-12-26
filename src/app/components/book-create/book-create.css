@@ -1,0 +1,139 @@
+:host {
+  display: block;
+  padding: 1.5rem;
+}
+
+.create-book-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.create-book-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #eff6ff;
+  color: #1e40af;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #bfdbfe;
+  margin-bottom: 2rem;
+}
+
+.create-book-header__icon {
+  stroke: currentColor;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.create-book-header__title {
+  font-weight: 600;
+}
+
+.create-book-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.create-book-card__body {
+  padding: 1rem;
+}
+
+.create-book-card__title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-bottom: 1rem;
+}
+
+.create-book-form {
+  display: grid;
+  gap: 1rem 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field--checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1.5rem;
+}
+
+.form-field__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-field__input,
+.form-field__select {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+}
+
+.form-field__checkbox-input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.create-book-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.button--ghost {
+  background-color: transparent;
+  color: #334155;
+}
+
+.button--ghost:hover {
+  background-color: #f1f5f9;
+}
+
+.button--primary {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.button--primary:hover {
+  background-color: #1d4ed8;
+}
+
+@media (min-width: 768px) {
+  .create-book-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .form-field--full-width {
+    grid-column: span 2 / span 2;
+  }
+  .create-book-actions {
+    grid-column: span 2 / span 2;
+  }
+}
