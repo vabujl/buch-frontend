@@ -1,50 +1,33 @@
-<div class="space-y-6">
-  <!-- Header -->
+<div class="search-page space-y-6">
   <div class="alert alert-info">
-    <span class="font-semibold">Bücher suchen</span>
+    <div>
+      <div class="font-semibold">Buecher suchen</div>
+      <div class="text-sm opacity-70">Finde Titel oder ISBN.</div>
+    </div>
   </div>
 
-  <!-- Suchformular -->
   <div class="card bg-base-100 shadow">
     <div class="card-body space-y-4">
       <div class="flex items-center justify-between gap-4">
         <h2 class="card-title">Suche</h2>
-
-        <button
-          class="btn btn-outline btn-sm"
-          type="button"
-          (click)="showFilters.set(!showFilters())"
-          aria-controls="filterPanel"
-          [attr.aria-expanded]="showFilters()"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path
-              fill-rule="evenodd"
-              d="M10.5 6a1.5 1.5 0 0 1 3 0v.75H20a.75.75 0 0 1 0 1.5h-6.5V9a1.5 1.5 0 0 1-3 0v-.75H4a.75.75 0 0 1 0-1.5h6.5V6Zm0 9a1.5 1.5 0 0 1 3 0v.75H20a.75.75 0 0 1 0 1.5h-6.5V18a1.5 1.5 0 0 1-3 0v-.75H4a.75.75 0 0 1 0-1.5h6.5V15Z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span>Filter</span>
-        </button>
+        <div class="text-sm opacity-70">Backend-Parameter</div>
       </div>
 
-      <form class="grid grid-cols-1 md:grid-cols-3 gap-4" (ngSubmit)="onSearch()" novalidate>
-        <!-- Suchbegriff -->
+      <form class="grid grid-cols-1 md:grid-cols-3 gap-4" [formGroup]="form" (submit)="onSearch($event)" novalidate>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Suchbegriff</span>
+            <span class="label-text">Titel</span>
           </div>
           <input
             class="input input-bordered w-full"
             type="text"
-            placeholder="Titel, Autor, Stichwort…"
-            [(ngModel)]="query.q"
-            name="q"
+            name="titel"
+            placeholder="Titel"
+            formControlName="titel"
             autocomplete="off"
           />
         </label>
 
-        <!-- ISBN -->
         <label class="form-control w-full">
           <div class="label">
             <span class="label-text">ISBN</span>
@@ -52,203 +35,203 @@
           <input
             class="input input-bordered w-full"
             type="text"
-            placeholder="z. B. 978…"
-            [(ngModel)]="query.isbn"
             name="isbn"
+            placeholder="z. B. 978"
+            formControlName="isbn"
             autocomplete="off"
           />
         </label>
 
-        <!-- Sortierung -->
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Sortierung</span>
+            <span class="label-text">Buchart</span>
           </div>
-          <select class="select select-bordered w-full" [(ngModel)]="query.sort" name="sort">
-            <option value="relevance">Relevanz</option>
-            <option value="titleAsc">Titel (A–Z)</option>
-            <option value="titleDesc">Titel (Z–A)</option>
-            <option value="yearDesc">Erscheinungsjahr (neu → alt)</option>
-            <option value="yearAsc">Erscheinungsjahr (alt → neu)</option>
+          <select class="select select-bordered w-full" name="art" formControlName="art">
+            <option value="">Alle</option>
+            <option value="EPUB">EPUB</option>
+            <option value="HARDCOVER">HARDCOVER</option>
+            <option value="PAPERBACK">PAPERBACK</option>
           </select>
         </label>
 
-        <!-- Suchmodus (Radio) -->
-        <div class="md:col-span-2">
-          <div class="label">
-            <span class="label-text">Suchmodus</span>
-          </div>
-          <div class="flex flex-wrap gap-4">
-            <label class="label cursor-pointer gap-2">
-              <input type="radio" name="mode" class="radio" value="all" [(ngModel)]="query.mode" />
-              <span class="label-text">Alle Felder</span>
-            </label>
-            <label class="label cursor-pointer gap-2">
-              <input type="radio" name="mode" class="radio" value="title" [(ngModel)]="query.mode" />
-              <span class="label-text">Nur Titel</span>
-            </label>
-            <label class="label cursor-pointer gap-2">
-              <input type="radio" name="mode" class="radio" value="author" [(ngModel)]="query.mode" />
-              <span class="label-text">Nur Autor</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Optionen (Checkbox) -->
         <div class="md:col-span-1">
           <div class="label">
             <span class="label-text">Optionen</span>
           </div>
-          <div class="space-y-2">
-            <label class="label cursor-pointer justify-start gap-2">
-              <input type="checkbox" class="checkbox" [(ngModel)]="query.onlyAvailable" name="onlyAvailable" />
-              <span class="label-text">Nur verfügbare</span>
-            </label>
-            <label class="label cursor-pointer justify-start gap-2">
-              <input type="checkbox" class="checkbox" [(ngModel)]="query.includeEbooks" name="includeEbooks" />
-              <span class="label-text">E-Books einschließen</span>
-            </label>
-          </div>
+          <label class="label cursor-pointer justify-start gap-2">
+            <input type="checkbox" class="checkbox" name="lieferbar" formControlName="lieferbar" />
+            <span class="label-text">Nur verfuegbare</span>
+          </label>
         </div>
 
-        <!-- Buttons -->
+        <div class="md:col-span-3">
+          <details class="border border-base-300 rounded-xl p-4">
+            <summary class="cursor-pointer font-semibold">Erweiterte Filter</summary>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+              <label class="form-control w-full">
+                <div class="label">
+                  <span class="label-text">Rating</span>
+                </div>
+                <input
+                  class="input input-bordered w-full"
+                  type="number"
+                  min="0"
+                  max="5"
+                  name="rating"
+                  formControlName="rating"
+                />
+              </label>
+              <label class="form-control w-full">
+                <div class="label"><span class="label-text">Preis</span></div>
+                <input
+                  class="input input-bordered w-full"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  name="preis"
+                  formControlName="preis"
+                />
+              </label>
+              <label class="form-control w-full">
+                <div class="label"><span class="label-text">Rabatt</span></div>
+                <input
+                  class="input input-bordered w-full"
+                  type="number"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  name="rabatt"
+                  formControlName="rabatt"
+                />
+              </label>
+              <label class="form-control w-full">
+                <div class="label"><span class="label-text">Datum</span></div>
+                <input class="input input-bordered w-full" type="date" name="datum" formControlName="datum" />
+              </label>
+              <label class="form-control w-full md:col-span-2">
+                <div class="label"><span class="label-text">Homepage</span></div>
+                <input
+                  class="input input-bordered w-full"
+                  type="url"
+                  name="homepage"
+                  placeholder="https://example.com"
+                  formControlName="homepage"
+                />
+              </label>
+              <div class="md:col-span-3">
+                <div class="label">
+                  <span class="label-text">Schlagwoerter</span>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                  <label class="label cursor-pointer gap-2">
+                    <input type="checkbox" class="checkbox" name="javascript" formControlName="javascript" />
+                    <span class="label-text">JavaScript</span>
+                  </label>
+                  <label class="label cursor-pointer gap-2">
+                    <input type="checkbox" class="checkbox" name="typescript" formControlName="typescript" />
+                    <span class="label-text">TypeScript</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
         <div class="md:col-span-3 flex flex-wrap items-center gap-2 justify-end">
-          <button class="btn btn-ghost" type="button" (click)="onReset()">Zurücksetzen</button>
-          <button class="btn btn-primary" type="submit" [disabled]="loading()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                fill-rule="evenodd"
-                d="M10.5 3.75a6.75 6.75 0 1 0 4.216 12.02l3.257 3.257a.75.75 0 1 0 1.06-1.06l-3.257-3.257A6.75 6.75 0 0 0 10.5 3.75Zm-5.25 6.75a5.25 5.25 0 1 1 10.5 0 5.25 5.25 0 0 1-10.5 0Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            <span>Suche</span>
-          </button>
+          <button class="btn btn-ghost" type="button" (click)="onReset()">Zuruecksetzen</button>
+          <button class="btn btn-primary" type="submit" [disabled]="loading()">Suche</button>
         </div>
       </form>
-
-      <!-- Erweiterte Filter -->
-      <div *ngIf="showFilters()" id="filterPanel" class="border border-base-300 rounded-xl p-4 space-y-4">
-        <div class="flex items-center justify-between">
-          <div class="font-semibold">Erweiterte Filter</div>
-          <button class="btn btn-ghost btn-xs" type="button" (click)="showFilters.set(false)">Schließen</button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Sprache -->
-          <label class="form-control w-full">
-            <div class="label">
-              <span class="label-text">Sprache</span>
-            </div>
-            <select class="select select-bordered w-full" [(ngModel)]="query.language" name="language">
-              <option value="">Alle</option>
-              <option value="de">Deutsch</option>
-              <option value="en">Englisch</option>
-            </select>
-          </label>
-          <!-- Jahr von -->
-          <label class="form-control w-full">
-            <div class="label"><span class="label-text">Jahr von</span></div>
-            <input
-              class="input input-bordered w-full"
-              type="number"
-              min="0"
-              placeholder="z. B. 2000"
-              [(ngModel)]="query.yearFrom"
-              name="yearFrom"
-            />
-          </label>
-          <!-- Jahr bis -->
-          <label class="form-control w-full">
-            <div class="label"><span class="label-text">Jahr bis</span></div>
-            <input
-              class="input input-bordered w-full"
-              type="number"
-              min="0"
-              placeholder="z. B. 2025"
-              [(ngModel)]="query.yearTo"
-              name="yearTo"
-            />
-          </label>
-        </div>
-        <div class="text-sm opacity-70">
-          Hinweis: Diese erweiterten Filter sind rein UI-seitig. Die eigentliche Filter-Logik kommt später im Service.
-        </div>
-      </div>
     </div>
   </div>
 
-  <!-- Status -->
-  <div *ngIf="loading()" class="alert">
+  @if (loading()) {
+  <div class="alert">
     <span class="loading loading-spinner"></span>
-    <span>Suche läuft…</span>
+    <span>Suche laeuft.</span>
   </div>
-  <div *ngIf="error()" class="alert alert-error">
+  }
+  @if (error()) {
+  <div class="alert alert-error">
     <span class="font-semibold">Fehler:</span>
     <span>{{ error() }}</span>
   </div>
+  }
 
-  <!-- Ergebnisse -->
   <div class="card bg-base-100 shadow">
     <div class="card-body space-y-4">
       <div class="flex items-center justify-between gap-4">
         <h2 class="card-title">Suchergebnisse</h2>
-        <div *ngIf="total() !== null" class="text-sm opacity-70">
-          {{ total() }} Treffer
-        </div>
+        @if (total() !== null) {
+        <div class="text-sm opacity-70">{{ total() }} Treffer</div>
+        }
       </div>
 
-      <ng-container *ngIf="!loading() && !error()">
-        <div *ngIf="books().length === 0; else results" class="alert">
-          <span>Keine Treffer. Passe die Suche/Filter an.</span>
+      @if (!loading() && !error()) {
+        @if (books().length === 0) {
+        <div class="alert">
+          <span>Keine Treffer. Passe die Suche an.</span>
         </div>
-        <ng-template #results>
-          <div class="space-y-3">
-            <div *ngFor="let book of books(); trackBy: trackById" class="border border-base-300 rounded-xl p-4">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <div class="font-semibold">{{ book.titel }}</div>
-                  <div class="text-sm opacity-70">
-                    <span *ngIf="book.autor">{{ book.autor }} - </span>{{ book.isbn }}
-                  </div>
+        } @else {
+        <div class="space-y-3">
+          @for (book of books(); track book.id) {
+          <div class="border border-base-300 rounded-xl p-4">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="font-semibold">{{ book.titel }}</div>
+                <div class="text-sm opacity-70">
+                  @if (book.autor) {
+                  <span>{{ book.autor }} - </span>
+                  }
+                  {{ book.isbn }}
                 </div>
-                <button class="btn btn-outline btn-sm" type="button" (click)="openDetails(book.id)">
-                  Details
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path
-                      fill-rule="evenodd"
-                      d="M10.72 6.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L15.44 12l-4.72-4.72a.75.75 0 0 1 0-1.06Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </button>
               </div>
+              <button class="btn btn-outline btn-sm" type="button" (click)="openDetails(book.id)">
+                Details
+              </button>
             </div>
           </div>
-        </ng-template>
-      </ng-container>
+          }
+        </div>
+        }
+      }
 
-      <!-- Pagination -->
-      <div *ngIf="totalPages() > 1" class="flex items-center justify-between pt-2">
+      @if (totalPages() > 1) {
+      <div class="flex items-center justify-between pt-2">
         <div class="join">
           <button class="btn btn-sm join-item" type="button" (click)="gotoPage(1)" [disabled]="page() === 1 || loading()">
-            «
+            <<
           </button>
-          <button class="btn btn-sm join-item" type="button" (click)="gotoPage(page() - 1)" [disabled]="page() === 1 || loading()">
-            Zurück
+          <button
+            class="btn btn-sm join-item"
+            type="button"
+            (click)="gotoPage(page() - 1)"
+            [disabled]="page() === 1 || loading()"
+          >
+            Zurueck
           </button>
         </div>
-        <div class="text-sm opacity-70">
-          Seite {{ page() }} / {{ totalPages() }}
-        </div>
+        <div class="text-sm opacity-70">Seite {{ page() }} / {{ totalPages() }}</div>
         <div class="join">
-          <button class="btn btn-sm join-item" type="button" (click)="gotoPage(page() + 1)" [disabled]="page() === totalPages() || loading()">
+          <button
+            class="btn btn-sm join-item"
+            type="button"
+            (click)="gotoPage(page() + 1)"
+            [disabled]="page() === totalPages() || loading()"
+          >
             Weiter
           </button>
-          <button class="btn btn-sm join-item" type="button" (click)="gotoPage(totalPages())" [disabled]="page() === totalPages() || loading()">
-            »
+          <button
+            class="btn btn-sm join-item"
+            type="button"
+            (click)="gotoPage(totalPages())"
+            [disabled]="page() === totalPages() || loading()"
+          >
+            >>
           </button>
         </div>
       </div>
+      }
     </div>
   </div>
 </div>

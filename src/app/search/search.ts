@@ -1,10 +1,8 @@
 import { Component, signal, computed, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-
-type SearchMode = 'all' | 'title' | 'author';
 
 interface Book {
   id: string;
@@ -13,31 +11,61 @@ interface Book {
   isbn: string;
 }
 
-interface SearchQuery {
-  q: string;
+interface SearchFormValue {
+  titel: string;
   isbn: string;
-  sort: 'relevance' | 'titleAsc' | 'titleDesc' | 'yearDesc' | 'yearAsc';
-  mode: SearchMode;
-  onlyAvailable: boolean;
-  includeEbooks: boolean;
-  language: '' | 'de' | 'en';
-  yearFrom: number | null;
-  yearTo: number | null;
+  art: '' | 'EPUB' | 'HARDCOVER' | 'PAPERBACK';
+  rating: number | null;
+  preis: number | null;
+  rabatt: number | null;
+  datum: string;
+  homepage: string;
+  javascript: boolean;
+  typescript: boolean;
+  lieferbar: boolean;
 }
+
+type SearchFormGroup = FormGroup<{
+  titel: FormControl<string>;
+  isbn: FormControl<string>;
+  art: FormControl<SearchFormValue['art']>;
+  rating: FormControl<number | null>;
+  preis: FormControl<number | null>;
+  rabatt: FormControl<number | null>;
+  datum: FormControl<string>;
+  homepage: FormControl<string>;
+  javascript: FormControl<boolean>;
+  typescript: FormControl<boolean>;
+  lieferbar: FormControl<boolean>;
+}>;
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './search.html',
 })
 export class Search {
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
   private readonly baseUrl = 'https://localhost:3000';
   private readonly restPath = '/rest';
 
+  private readonly defaultFormValue: SearchFormValue = {
+    titel: '',
+    isbn: '',
+    art: '',
+    rating: null,
+    preis: null,
+    rabatt: null,
+    datum: '',
+    homepage: '',
+    javascript: false,
+    typescript: false,
+    lieferbar: false,
+  };
+
   // UI state
-  showFilters = signal(false);
   loading = signal(false);
   error = signal<string | null>(null);
 
@@ -55,25 +83,27 @@ export class Search {
     return Math.max(1, Math.ceil(t / this.pageSize()));
   });
 
-  // query model
-  query: SearchQuery = {
-    q: '',
-    isbn: '',
-    sort: 'relevance',
-    mode: 'all',
-    onlyAvailable: false,
-    includeEbooks: false,
-    language: '',
-    yearFrom: null,
-    yearTo: null,
-  };
+  form: SearchFormGroup = new FormGroup({
+    titel: new FormControl('', { nonNullable: true }),
+    isbn: new FormControl('', { nonNullable: true }),
+    art: new FormControl<SearchFormValue['art']>('', { nonNullable: true }),
+    rating: new FormControl<number | null>(null),
+    preis: new FormControl<number | null>(null),
+    rabatt: new FormControl<number | null>(null),
+    datum: new FormControl('', { nonNullable: true }),
+    homepage: new FormControl('', { nonNullable: true }),
+    javascript: new FormControl(false, { nonNullable: true }),
+    typescript: new FormControl(false, { nonNullable: true }),
+    lieferbar: new FormControl(false, { nonNullable: true }),
+  });
 
-  async onSearch(): Promise<void> {
+  async onSearch(event?: Event): Promise<void> {
+    event?.preventDefault();
     this.error.set(null);
     this.loading.set(true);
 
     try {
-      const params = this.buildParams();
+      const params = this.buildParams(this.form.getRawValue());
       const url = `${this.baseUrl}${this.restPath}`;
       const page = await firstValueFrom(this.http.get<BookPage>(url, { params }));
       const mapped = page.content.map(book => this.mapBook(book));
@@ -92,17 +122,7 @@ export class Search {
   }
 
   onReset(): void {
-    this.query = {
-      q: '',
-      isbn: '',
-      sort: 'relevance',
-      mode: 'all',
-      onlyAvailable: false,
-      includeEbooks: false,
-      language: '',
-      yearFrom: null,
-      yearTo: null,
-    };
+    this.form.reset(this.defaultFormValue);
     this.page.set(1);
     this.books.set([]);
     this.total.set(null);
@@ -118,29 +138,36 @@ export class Search {
   }
 
   openDetails(bookId: string): void {
-    console.log('Open details', bookId);
+    void this.router.navigate(['/buch', bookId]);
   }
 
-  trackById(_index: number, book: Book): string {
-    return book.id;
-  }
-
-  private buildParams(): HttpParams {
+  private buildParams(query: SearchFormValue): HttpParams {
     let params = new HttpParams();
-    const q = this.query.q.trim();
-    const isbn = this.query.isbn.trim();
     const page = Math.max(0, this.page() - 1);
     const size = this.pageSize();
 
-    if (isbn) {
-      params = params.set('isbn', isbn);
-    }
-    if (q) {
-      params = params.set('titel', q);
-    }
-    if (this.query.onlyAvailable) {
-      params = params.set('lieferbar', 'true');
-    }
+    const setTrimmed = (key: string, value: string) => {
+      const trimmed = value.trim();
+      if (trimmed) params = params.set(key, trimmed);
+    };
+    const setNumber = (key: string, value: number | null) => {
+      if (value === null || Number.isNaN(value)) return;
+      params = params.set(key, String(value));
+    };
+
+    setTrimmed('isbn', query.isbn);
+    setTrimmed('titel', query.titel);
+    setTrimmed('homepage', query.homepage);
+
+    if (query.art) params = params.set('art', query.art);
+    if (query.lieferbar) params = params.set('lieferbar', 'true');
+    if (query.javascript) params = params.set('javascript', 'true');
+    if (query.typescript) params = params.set('typescript', 'true');
+
+    setNumber('rating', query.rating);
+    setNumber('preis', query.preis);
+    setNumber('rabatt', query.rabatt);
+    if (query.datum) params = params.set('datum', query.datum);
 
     params = params.set('page', String(page)).set('size', String(size));
     return params;
