@@ -1,4 +1,4 @@
-@startuml BookStore_State_Diagram_admin
+@startuml BookStore_State_Diagram_user
 hide empty description
 
 state "index.html" as i{
@@ -19,20 +19,7 @@ state "BookSearch" as bs1 {
   c1 --> FoundBooks : AL 1 book found
 }
 
-state c2 <<choice>>
-[*] --> CreateBook : menu option "New Book"
-CreateBook -down-> c2 : Button "OK"
-c2 -up-> ErrorMessage : incorrect data
-ErrorMessage -up-> CreateBook
-c2 --> Home : correct data
-
-state c3 <<choice>>
-Home <-up- c3 : correct data
-c3 -down-> UpdateBook : incorrect data
-UpdateBook -up-> c3 : Button "OK"
-
 FoundBooks --> DetailsBook : click link
-UpdateBook <-up- DetailsBook: Button "update"
 [*] --> bs1 : menu option "Search"
 }
 
