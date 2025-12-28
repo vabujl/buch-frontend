@@ -1,0 +1,28 @@
+@startuml BookStore_State_Diagram_user
+hide empty description
+
+state "index.html" as i{
+  i: jwt\nroles\nexpiration
+
+[*] --> Login : Logout
+
+state "BookSearch" as bs1 {
+  state c1 <<choice>>
+  [*] --> SearchForm : type in criteria
+  SearchForm --> Waiting : Button "Search"
+  Waiting --> c1 : SearchResult received
+  state "SearchResult" as sr1{
+    state "ErrorMessage" as e1
+    state FoundBooks
+  }
+  c1 --> e1 : no book found
+  c1 --> FoundBooks : AL 1 book found
+}
+
+FoundBooks --> DetailsBook : click link
+[*] --> bs1 : menu option "Search"
+}
+
+footer (c) Niklas Tremmel(G3)
+
+@enduml
