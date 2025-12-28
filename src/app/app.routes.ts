@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Search } from './search/search';
+import { Search } from './components/search/search';
 import { Login } from './components/login/login';
 import { Create } from './components/book-create/book-create';
 

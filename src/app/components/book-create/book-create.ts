@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './book-create.html',
-  styles: []
+  styleUrl: './book-create.css'
 })
 export class Create {
 }
